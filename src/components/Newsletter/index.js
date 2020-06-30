@@ -24,7 +24,7 @@ export const Newsletter = ({ name: nameProp }) => {
   }
 
   const handleSubmit = e => {
-    const data = { "form-name": "newsletter", name, email, message }
+    const data = { "form-name": "contact", name, email, message }
     
     fetch("/", {
       method: "POST",
