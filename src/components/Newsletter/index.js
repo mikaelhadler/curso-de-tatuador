@@ -42,7 +42,7 @@ export const Newsletter = ({ name: nameProp }) => {
 
     try {
       setLoading(true)
-      const data = { "form-name": "newsletter", name, email, whatsApp }
+      const data = { "form-name": "contact", name, email, whatsApp }
       fetch("/", {
         method: "POST",
         // headers: { "Content-Type": 'multipart/form-data; boundary=random' },
@@ -77,7 +77,7 @@ export const Newsletter = ({ name: nameProp }) => {
   return (
     <Section title={newsletter.title} small={true}>
       <Container name={nameProp}>
-        <Form onSubmit={formTrigger} action="/thank-you">
+        <Form onSubmit={formTrigger} form-name="contact" action="/thank-you">
           <Input
             disabled={disabled}
             placeholder={newsletter.name}
@@ -98,7 +98,7 @@ export const Newsletter = ({ name: nameProp }) => {
           <Input
             disabled={disabled}
             placeholder={newsletter.whatsapp}
-            type="tel"
+            type="text"
             value={whatsApp}
             name="whatsApp"
             onChange={({ target: { value } }) => setWhatsApp(value)}
