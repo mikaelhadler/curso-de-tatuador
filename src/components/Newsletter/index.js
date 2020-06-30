@@ -51,8 +51,7 @@ export const Newsletter = ({ name: nameProp }) => {
   }
 
   return (
-    <Section title={newsletter.title} small={true}>
-      <Container name={nameProp}>
+    <div>
       <form onSubmit={handleSubmit} action="/thank-you/">
           <p>
             <label>
@@ -73,8 +72,7 @@ export const Newsletter = ({ name: nameProp }) => {
             <button type="submit">Send</button>
           </p>
         </form>
-      </Container>
-    </Section>
+      </div>
   )
 }
 
