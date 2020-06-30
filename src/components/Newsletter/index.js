@@ -83,6 +83,7 @@ export const Newsletter = ({ name: nameProp }) => {
             placeholder={newsletter.name}
             type="text"
             value={name}
+            name="name"
             onChange={({ target: { value } }) => setName(value)}
             required
           />
@@ -91,6 +92,7 @@ export const Newsletter = ({ name: nameProp }) => {
             placeholder={newsletter.email}
             type="email"
             value={email}
+            name="email"
             onChange={({ target: { value } }) => setEmail(value)}
           />
           <Input
@@ -98,6 +100,7 @@ export const Newsletter = ({ name: nameProp }) => {
             placeholder={newsletter.whatsapp}
             type="tel"
             value={whatsApp}
+            name="whatsApp"
             onChange={({ target: { value } }) => setWhatsApp(value)}
           />
           <Send disabled={disabled} as="button">
