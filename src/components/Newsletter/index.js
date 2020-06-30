@@ -10,20 +10,10 @@ import { ERROR_TYPE } from "../../utils/constants"
 import { sendMail } from "../../utils/send-mail"
 
 export const Newsletter = ({ name: nameProp }) => {
-  // Inputs state
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [whatsApp, setWhatsApp] = useState("")
-
-  // Form state
-  const [error, setError] = useState(false)
-  const [errorType, setErrorType] = useState()
-  const [success, setSuccess] = useState(false)
-  const [loading, setLoading] = useState(false)
-
-  const disabled = success || loading
-
-  const canRequest = () => name && (whatsApp || email)
+  const [name,setName] = useState('');
+  const [status,setStatus] = useState('');
+  const [email,setEmail] = useState('');
+  const [message,setMessage] = useState('');
 
   const encode = (data) => {
     const formData = new FormData();
@@ -33,82 +23,56 @@ export const Newsletter = ({ name: nameProp }) => {
     return formData
   }
 
-  const formTrigger = async event => {
+  const handleSubmit = e => {
+    const data = { "form-name": "contact", name, email, message }
+    
+    fetch("/", {
+      method: "POST",
+      // headers: { "Content-Type": 'multipart/form-data; boundary=random' },
+      body: encode(data)
+    })
+      .then(() => setStatus("Form Submission Successful!!"))
+      .catch(error => setStatus("Form Submission Failed!"));
 
-    if (!canRequest()) {
-      setErrorType(ERROR_TYPE.VALUES)
-      return setError(true)
+    e.preventDefault();
+  };
+
+  const handleChange = e => {
+    const {name, value} = e.target
+    if (name === 'name' ){
+      return setName(value)
     }
-
-    try {
-      setLoading(true)
-      const data = { "form-name": "contact", name, email, whatsApp }
-      fetch("/", {
-        method: "POST",
-        // headers: { "Content-Type": 'multipart/form-data; boundary=random' },
-        body: encode(data)
-      })
-        .then(() => console.log('deu certo'))
-        .catch(error => console.log('deu ruim :('));
-      setLoading(false)
-      event.preventDefault()
-
-      if (!success) {
-        setErrorType(ERROR_TYPE.NETWORK)
-        setLoading(false)
-        return setError(true)
-      }
-      setSuccess(true)
-      setError(false)
-      clear()
-    } catch {
-      setErrorType(ERROR_TYPE.NETWORK)
-      setLoading(false)
-      return setError(true)
+    if (name === 'email' ){
+      return setEmail(value)
     }
-  }
-
-  const clear = () => {
-    setName("")
-    setEmail("")
-    setWhatsApp("")
+    if (name === 'message' ){
+      return setMessage(value)
+    }
   }
 
   return (
     <Section title={newsletter.title} small={true}>
       <Container name={nameProp}>
-        <Form onSubmit={formTrigger} action="/thank-you">
-          <Input
-            disabled={disabled}
-            placeholder={newsletter.name}
-            type="text"
-            value={name}
-            name="name"
-            onChange={({ target: { value } }) => setName(value)}
-            required
-          />
-          <Input
-            disabled={disabled}
-            placeholder={newsletter.email}
-            type="email"
-            value={email}
-            name="email"
-            onChange={({ target: { value } }) => setEmail(value)}
-          />
-          <Input
-            disabled={disabled}
-            placeholder={newsletter.whatsapp}
-            type="text"
-            value={whatsApp}
-            name="whatsApp"
-            onChange={({ target: { value } }) => setWhatsApp(value)}
-          />
-          <Send disabled={disabled} as="button">
-            {newsletter.send}
-          </Send>
-        </Form>
-        {error && <Alert>{newsletter.error[errorType]}</Alert>}
-        {success && <Alert>{newsletter.success}</Alert>}
+      <form onSubmit={handleSubmit} action="/thank-you/">
+          <p>
+            <label>
+              Your Name: <input type="text" name="name" value={name} onChange={handleChange} />
+            </label>
+          </p>
+          <p>
+            <label>
+              Your Email: <input type="email" name="email" value={email} onChange={handleChange} />
+            </label>
+          </p>
+          <p>
+            <label>
+              Message: <textarea name="message" value={message} onChange={handleChange} />
+            </label>
+          </p>
+          <p>
+            <button type="submit">Send</button>
+          </p>
+        </form>
       </Container>
     </Section>
   )
