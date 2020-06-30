@@ -77,7 +77,7 @@ export const Newsletter = ({ name: nameProp }) => {
   return (
     <Section title={newsletter.title} small={true}>
       <Container name={nameProp}>
-        <Form onSubmit={formTrigger} form-name="contact" action="/thank-you">
+        <Form onSubmit={formTrigger} action="/thank-you">
           <Input
             disabled={disabled}
             placeholder={newsletter.name}
